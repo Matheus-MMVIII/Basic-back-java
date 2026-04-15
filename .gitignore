@@ -24,3 +24,7 @@ hs_err_pid*
 replay_pid*
 
 .vscode/
+bin/
+.env
+.env.*
+!.env.example
