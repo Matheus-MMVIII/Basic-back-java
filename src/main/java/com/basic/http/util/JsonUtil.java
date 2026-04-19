@@ -4,17 +4,15 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.StringJoiner;
 
 import com.basic.exception.BadRequestException;
 
 public final class JsonUtil {
-    // Impede a instanciacao da classe utilitaria de serializacao e parse de JSON.
+
     private JsonUtil() {
+
     }
 
-    // Converte um JSON plano em mapa de strings para facilitar validacao e uso nos
-    // services.
     public static Map<String, String> parseFlatObject(String json) {
         if (json == null) {
             throw new BadRequestException("Corpo JSON obrigatorio.");
@@ -50,18 +48,14 @@ public final class JsonUtil {
         return values;
     }
 
-    // Cria um objeto JSON simples com apenas uma chave e um valor de texto.
     public static String object(String key, String value) {
         return "{\"" + escape(key) + "\":\"" + escape(value) + "\"}";
     }
 
-    // Cria um JSON padrao de erro usado pelas respostas da API.
     public static String error(String message) {
         return "{\"error\":\"" + escape(message) + "\"}";
     }
 
-    // Divide os pares de um objeto JSON sem quebrar valores que estejam entre
-    // aspas.
     private static List<String> splitTopLevel(String content) {
         List<String> parts = new ArrayList<>();
         StringBuilder current = new StringBuilder();
@@ -101,8 +95,6 @@ public final class JsonUtil {
         return parts;
     }
 
-    // Localiza o separador chave-valor ignorando dois pontos que estejam dentro de
-    // strings.
     private static int findColonOutsideQuotes(String pair) {
         boolean inQuotes = false;
         boolean escaped = false;
@@ -128,8 +120,6 @@ public final class JsonUtil {
         return -1;
     }
 
-    // Remove as aspas externas de uma string JSON e converte sequencias escapadas
-    // para texto normal.
     private static String parseQuotedString(String rawValue) {
         String trimmedValue = rawValue.trim();
         if (trimmedValue.length() < 2 || trimmedValue.charAt(0) != '"'
@@ -139,8 +129,6 @@ public final class JsonUtil {
         return unescape(trimmedValue.substring(1, trimmedValue.length() - 1));
     }
 
-    // Interpreta um valor JSON simples aceitando strings, nulos, numeros e
-    // booleanos.
     private static String parseValue(String rawValue) {
         String trimmedValue = rawValue.trim();
         if (trimmedValue.startsWith("\"")) {
@@ -158,7 +146,6 @@ public final class JsonUtil {
         throw new BadRequestException("JSON invalido.");
     }
 
-    // Escapa caracteres especiais para gerar JSON valido nas respostas.
     private static String escape(String value) {
         return value
                 .replace("\\", "\\\\")
@@ -166,12 +153,11 @@ public final class JsonUtil {
                 .replace("\n", "\\n")
                 .replace("\r", "\\r");
     }
-
+/* 
     private static String escapeNullable(String value) {
         return escape(value == null ? "" : value);
-    }
+    }*/
 
-    // Converte sequencias escapadas de uma string JSON para seus caracteres reais.
     private static String unescape(String value) {
         StringBuilder builder = new StringBuilder();
         boolean escaped = false;

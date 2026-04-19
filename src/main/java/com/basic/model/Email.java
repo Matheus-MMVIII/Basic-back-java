@@ -14,6 +14,6 @@ public class Email {
     }
 
     private boolean validateEmail(String email) {
-        return email != null && email.matches("^[A-Za-z0-9+_.-]+@(.+)$"); // Basic validation for email format
+        return email != null && email.matches("^[A-Za-z0-9+_.-]+@(.+)$");
     }
 }

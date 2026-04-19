@@ -14,7 +14,7 @@ public class CellPhone {
     }
 
     private boolean validateNumber(String number) {
-        return number != null && number.matches("^\\+?[1-9]\\d{1,14}$"); // Basic validation for international phone numbers
+        return number != null && number.matches("^\\+?[1-9]\\d{1,14}$");
     }
     
 }
