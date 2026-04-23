@@ -1,4 +1,32 @@
 package com.basic.http.handler;
 
-public class ProductsHandler {
+import java.util.List;
+import java.util.Map;
+
+import com.basic.http.util.HttpExchangeHelper;
+import com.basic.http.util.JsonUtil;
+import com.basic.model.Product;
+import com.basic.service.ProductService;
+import com.sun.net.httpserver.HttpExchange;
+
+public class ProductsHandler extends BaseHandler {
+    private static final String BASE_PATH = "/api/products";
+
+    private final ProductService productService;
+
+    public ProductsHandler(ProductService productService) {
+        this.productService = productService;
+    }
+    @Override
+    protected void handleRequest(HttpExchange exchange) throws Exception {
+        String method = exchange.getRequestMethod();
+        int id = extractIdFromPath(exchange, BASE_PATH);
+        if ("GET".equalsIgnoreCase(method)) {
+            Product product = productService.findById(id);
+            HttpExchangeHelper.sendJson(exchange, 200, JsonUtil.product(product));
+            return;
+        }
+
+        HttpExchangeHelper.sendMethodNotAllowed(exchange, "GET, POST, PUT, DELETE, OPTIONS");
+    }
 }
