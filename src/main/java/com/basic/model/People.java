@@ -19,7 +19,7 @@ public abstract class People {
 		return cpf;
 	}
 
-	public Email getEmail {
+	public Email getEmail() {
 		return email;
 	}
 }
