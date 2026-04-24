@@ -7,7 +7,7 @@ public class Product {
     private final Category category;
     private final int stock;
 
-    public Product(int id, String name, double price, Category category, int stock) {
+    public Product(int id, String name, double price, String category, int stock) {
         if (name == null || name.trim().isEmpty())
             throw new IllegalArgumentException("Product name cannot be null or empty");
         if (price < 0)
@@ -19,7 +19,7 @@ public class Product {
         this.id = id;
         this.name = name;
         this.price = price;
-        this.category = category;
+        this.category = Category.valueOf(category);
         this.stock = stock;
     }
 
@@ -35,8 +35,8 @@ public class Product {
         return price;
     }
 
-    public Category getCategory() {
-        return category;
+    public String getCategory() {
+        return category.name();
     }
 
     public int getStock() {
