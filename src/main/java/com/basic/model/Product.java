@@ -4,17 +4,21 @@ public class Product {
     private final String name;
     private final double price;
     private final Category category;
+    private final int stock;
 
-    public Product(String name, double price, Category category) {
+    public Product(String name, double price, Category category, int stock) {
         if (name == null || name.trim().isEmpty())
             throw new IllegalArgumentException("Product name cannot be null or empty");
         if (price < 0)
             throw new IllegalArgumentException("Price cannot be negative");
         if (category == null)
             throw new IllegalArgumentException("Category cannot be null");
+        if (stock < 0)
+            throw new IllegalArgumentException("Stock cannot be negative");
         this.name = name;
         this.price = price;
         this.category = category;
+        this.stock = stock;
     }
 
     public String getName() {
@@ -27,5 +31,9 @@ public class Product {
 
     public Category getCategory() {
         return category;
+    }
+
+    public int getStock() {
+        return stock;
     }
 }
