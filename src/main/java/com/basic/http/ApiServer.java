@@ -7,6 +7,9 @@ import java.util.concurrent.Executors;
 
 import com.basic.config.AppConfig;
 import com.basic.http.handler.HealthHandler;
+import com.basic.http.handler.ProductsHandler;
+import com.basic.repository.ProductRepository;
+import com.basic.service.ProductService;
 import com.sun.net.httpserver.HttpServer;
 
 public class ApiServer {
@@ -32,6 +35,9 @@ public class ApiServer {
     }
 
     private void registerContexts() {
+        ProductService productService = new ProductService(new ProductRepository());
+
         server.createContext("/health", new HealthHandler());
+        server.createContext("/api/products", new ProductsHandler(productService));
     }
 }

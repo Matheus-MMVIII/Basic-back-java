@@ -5,6 +5,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.basic.model.Product;
 import com.basic.exception.BadRequestException;
 
 public final class JsonUtil {
@@ -54,6 +55,16 @@ public final class JsonUtil {
 
     public static String error(String message) {
         return "{\"error\":\"" + escape(message) + "\"}";
+    }
+
+    public static String product(Product product) {
+        return "{"
+                + "\"id\":" + product.getId() + ","
+                + "\"name\":\"" + escape(product.getName()) + "\","
+                + "\"price\":" + product.getPrice() + ","
+                + "\"category\":\"" + product.getCategory() + "\","
+                + "\"stock\":" + product.getStock() + ","
+                + "}";
     }
 
     private static List<String> splitTopLevel(String content) {
