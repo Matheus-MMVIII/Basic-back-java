@@ -35,7 +35,7 @@ public class ProductService {
     public Product create(Map<String, String> payload) throws SQLException {
         String name = RequestValidator.requireText(payload, "name", 2, 100);
         double price = RequestValidator.requireDecimal(payload, "price", 0.0, 1000000.0);
-        String category = RequestValidator.requireText(payload, "category");
+        String category = RequestValidator.requireText(payload, "category", 2, 100);
         int stock = RequestValidator.requireInt(payload, "stock", 0, 1000000);
 
         try (Connection connection = DatabaseConfig.getConnection()) {
@@ -46,8 +46,8 @@ public class ProductService {
     public Product update(int id, Map<String, String> payload) throws SQLException {
         String name = RequestValidator.requireText(payload, "name", 2, 100);
         double price = RequestValidator.requireDecimal(payload, "price", 0.0, 1000000.0);
+        String category = RequestValidator.requireText(payload, "category", 2, 100);
         int stock = RequestValidator.requireInt(payload, "stock", 0, 1000000);
-        String category = RequestValidator.requireText(payload, "category");
 
 
         try (Connection connection = DatabaseConfig.getConnection()) {

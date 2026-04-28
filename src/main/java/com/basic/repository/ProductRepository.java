@@ -61,7 +61,7 @@ public class ProductRepository {
     }
 
     public Product update(Connection connection, Product product) throws SQLException {
-        String sql = "UPDATE product SET name = ?, price = ?, stock = ?, size = ?, color = ? WHERE id = ?";
+        String sql = "UPDATE product SET name = ?, price = ?, category = ?, stock = ?, WHERE id = ?";
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setString(1, product.getName());
             statement.setDouble(2, product.getPrice());
@@ -98,7 +98,7 @@ public class ProductRepository {
                 resultSet.getInt("id"),
                 resultSet.getString("name"),
                 resultSet.getDouble("price"),
-                resultSet.getString("Category"),
+                resultSet.getString("category"),
                 resultSet.getInt("stock"));
     }
 }
