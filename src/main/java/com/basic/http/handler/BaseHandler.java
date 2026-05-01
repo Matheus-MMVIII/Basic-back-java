@@ -26,6 +26,8 @@ public abstract class BaseHandler implements HttpHandler {
         } catch (ApiException ex) {
             HttpExchangeHelper.sendJson(exchange, ex.getStatusCode(), JsonUtil.error(ex.getMessage()));
         } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+            System.out.println(ex.getErrorCode());
             HttpExchangeHelper.sendJson(exchange, 500, JsonUtil.error("Erro interno ao acessar o banco."));
         } catch (IllegalArgumentException ex) {
             HttpExchangeHelper.sendJson(exchange, 400, JsonUtil.error(ex.getMessage()));
