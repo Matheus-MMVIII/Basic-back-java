@@ -1,5 +1,6 @@
 package com.basic.http.util;
 
+import java.util.StringJoiner;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -65,6 +66,14 @@ public final class JsonUtil {
                 + "\"category\":\"" + product.getCategory() + "\","
                 + "\"stock\":" + product.getStock() + ","
                 + "}";
+    }
+
+    public static String products(List<Product> products) {
+        StringJoiner joiner = new StringJoiner(",", "[", "]");
+        for (Product product : products) {
+            joiner.add(product(product));
+        }
+        return joiner.toString();
     }
 
     private static List<String> splitTopLevel(String content) {

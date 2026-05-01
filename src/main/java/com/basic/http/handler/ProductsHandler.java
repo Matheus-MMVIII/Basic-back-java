@@ -21,6 +21,11 @@ public class ProductsHandler extends BaseHandler {
     protected void handleRequest(HttpExchange exchange) throws Exception {
         String method = exchange.getRequestMethod();
         int id = extractIdFromPath(exchange, BASE_PATH);
+        if ("GET".equalsIgnoreCase(method) && id == -1) {
+            List<Product> products = productService.listAll();
+            HttpExchangeHelper.sendJson(exchange, 200, JsonUtil.products(products));
+            return;
+        }
         if ("GET".equalsIgnoreCase(method)) {
             Product product = productService.findById(id);
             HttpExchangeHelper.sendJson(exchange, 200, JsonUtil.product(product));
