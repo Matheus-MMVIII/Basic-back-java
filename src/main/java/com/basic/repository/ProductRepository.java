@@ -35,7 +35,7 @@ public class ProductRepository {
     }
 
     public Optional<Product> findById(Connection connection, int productId) throws SQLException {
-        String sql = "SELECT * FROM product WHERE id = ?";
+        String sql = "SELECT * FROM products WHERE id = ?";
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setInt(1, productId);
             try (ResultSet resultSet = statement.executeQuery()) {
@@ -48,7 +48,7 @@ public class ProductRepository {
     }
 
     public Optional<Product> findByIdForUpdate(Connection connection, int productId) throws SQLException {
-        String sql = "SELECT * FROM product WHERE id = ? FOR UPDATE";
+        String sql = "SELECT * FROM products WHERE id = ? FOR UPDATE";
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setInt(1, productId);
             try (ResultSet resultSet = statement.executeQuery()) {
@@ -61,7 +61,7 @@ public class ProductRepository {
     }
 
     public Product update(Connection connection, Product product) throws SQLException {
-        String sql = "UPDATE product SET name = ?, price = ?, category = ?, stock = ?, WHERE id = ?";
+        String sql = "UPDATE products SET name = ?, price = ?, category = ?, stock = ?, WHERE id = ?";
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setString(1, product.getName());
             statement.setDouble(2, product.getPrice());
@@ -73,7 +73,7 @@ public class ProductRepository {
     }
 
     public boolean delete(Connection connection, int productId) throws SQLException {
-        String sql = "DELETE FROM product WHERE id = ?";
+        String sql = "DELETE FROM products WHERE id = ?";
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setInt(1, productId);
             return statement.executeUpdate() > 0;
@@ -81,7 +81,7 @@ public class ProductRepository {
     }
 
     public List<Product> listAll(Connection connection) throws SQLException {
-        String sql = "SELECT * FROM product ORDER BY id";
+        String sql = "SELECT * FROM products ORDER BY id";
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             try (ResultSet resultSet = statement.executeQuery()) {
                 List<Product> productItems = new ArrayList<>();
