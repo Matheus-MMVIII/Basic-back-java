@@ -21,6 +21,8 @@ public class ProductsHandler extends BaseHandler {
     protected void handleRequest(HttpExchange exchange) throws Exception {
         String method = exchange.getRequestMethod();
         int id = extractIdFromPath(exchange, BASE_PATH);
+        System.out.println("method: "+method);
+        System.out.println(id);
         if ("GET".equalsIgnoreCase(method) && id == -1) {
             List<Product> products = productService.listAll();
             HttpExchangeHelper.sendJson(exchange, 200, JsonUtil.products(products));
@@ -41,6 +43,11 @@ public class ProductsHandler extends BaseHandler {
             Map<String, String> payload = JsonUtil.parseFlatObject(requireJsonBody(exchange));
             Product createdProduct = productService.update(id, payload);
             HttpExchangeHelper.sendJson(exchange, 200, JsonUtil.product(createdProduct));
+            return;
+        }
+        if ("DELETE".equalsIgnoreCase(method) && id != -1) {
+            productService.delete(id);
+            HttpExchangeHelper.sendNoContent(exchange);
             return;
         }
 
