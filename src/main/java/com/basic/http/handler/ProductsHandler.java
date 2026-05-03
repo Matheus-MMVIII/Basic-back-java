@@ -31,6 +31,12 @@ public class ProductsHandler extends BaseHandler {
             HttpExchangeHelper.sendJson(exchange, 200, JsonUtil.product(product));
             return;
         }
+        if ("POST".equalsIgnoreCase(method) && id == -1) {
+            Map<String, String> payload = JsonUtil.parseFlatObject(requireJsonBody(exchange));
+            Product createdProduct = productService.create(payload);
+            HttpExchangeHelper.sendJson(exchange, 201, JsonUtil.product(createdProduct));
+            return;
+        }
 
         HttpExchangeHelper.sendMethodNotAllowed(exchange, "GET, POST, PUT, DELETE, OPTIONS");
     }
