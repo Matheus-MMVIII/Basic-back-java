@@ -26,7 +26,7 @@ public class ApiServer {
 
     public void start() {
         server.start();
-        System.out.println("Servidor iniciado na porta " + AppConfig.getPort());
+        System.out.println("Server started on port " + AppConfig.getPort());
     }
 
     public void stop() {

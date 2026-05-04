@@ -17,15 +17,15 @@ public final class JsonUtil {
 
     public static Map<String, String> parseFlatObject(String json) {
         if (json == null) {
-            throw new BadRequestException("Corpo JSON obrigatorio.");
+            throw new BadRequestException("JSON body required.");
         }
 
         String trimmedJson = json.trim();
         if (trimmedJson.isEmpty()) {
-            throw new BadRequestException("Corpo JSON obrigatorio.");
+            throw new BadRequestException("JSON body required.");
         }
         if (!trimmedJson.startsWith("{") || !trimmedJson.endsWith("}")) {
-            throw new BadRequestException("JSON invalido.");
+            throw new BadRequestException("JSON invalid.");
         }
 
         String content = trimmedJson.substring(1, trimmedJson.length() - 1).trim();
@@ -38,7 +38,7 @@ public final class JsonUtil {
         for (String pair : pairs) {
             int colonIndex = findColonOutsideQuotes(pair);
             if (colonIndex <= 0) {
-                throw new BadRequestException("JSON invalido.");
+                throw new BadRequestException("JSON invalid.");
             }
 
             String rawKey = pair.substring(0, colonIndex).trim();
@@ -144,7 +144,7 @@ public final class JsonUtil {
         String trimmedValue = rawValue.trim();
         if (trimmedValue.length() < 2 || trimmedValue.charAt(0) != '"'
                 || trimmedValue.charAt(trimmedValue.length() - 1) != '"') {
-            throw new BadRequestException("JSON invalido.");
+            throw new BadRequestException("JSON invalid.");
         }
         return unescape(trimmedValue.substring(1, trimmedValue.length() - 1));
     }
@@ -163,7 +163,7 @@ public final class JsonUtil {
         if ("true".equals(trimmedValue) || "false".equals(trimmedValue)) {
             return trimmedValue;
         }
-        throw new BadRequestException("JSON invalido.");
+        throw new BadRequestException("JSON invalid.");
     }
 
     private static String escape(String value) {
@@ -201,7 +201,7 @@ public final class JsonUtil {
                         builder.append('\t');
                         break;
                     default:
-                        throw new BadRequestException("JSON invalido.");
+                        throw new BadRequestException("JSON invalid.");
                 }
                 escaped = false;
                 continue;
@@ -215,7 +215,7 @@ public final class JsonUtil {
         }
 
         if (escaped) {
-            throw new BadRequestException("JSON invalido.");
+            throw new BadRequestException("JSON invalid.");
         }
 
         return builder.toString();

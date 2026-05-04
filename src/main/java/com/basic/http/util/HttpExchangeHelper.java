@@ -39,7 +39,7 @@ public final class HttpExchangeHelper {
             while ((bytesRead = inputStream.read(buffer)) != -1) {
                 totalBytes += bytesRead;
                 if (totalBytes > maxBytes) {
-                    throw new BadRequestException("Corpo da requisicao excede o limite permitido.");
+                    throw new BadRequestException("The request body exceeds the allowed limit.");
                 }
                 outputStream.write(buffer, 0, bytesRead);
             }
@@ -61,6 +61,6 @@ public final class HttpExchangeHelper {
 
     public static void sendMethodNotAllowed(HttpExchange exchange, String allowedMethods) throws IOException {
         exchange.getResponseHeaders().set("Allow", allowedMethods);
-        sendJson(exchange, 405, JsonUtil.error("Metodo nao permitido."));
+        sendJson(exchange, 405, JsonUtil.error("This method is not permitted."));
     }
 }

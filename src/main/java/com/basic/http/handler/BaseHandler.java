@@ -26,11 +26,11 @@ public abstract class BaseHandler implements HttpHandler {
         } catch (ApiException ex) {
             HttpExchangeHelper.sendJson(exchange, ex.getStatusCode(), JsonUtil.error(ex.getMessage()));
         } catch (SQLException ex) {
-            HttpExchangeHelper.sendJson(exchange, 500, JsonUtil.error("Erro interno ao acessar o banco."));
+            HttpExchangeHelper.sendJson(exchange, 500, JsonUtil.error("Internal error accessing the database."));
         } catch (IllegalArgumentException ex) {
             HttpExchangeHelper.sendJson(exchange, 400, JsonUtil.error(ex.getMessage()));
         } catch (Exception ex) {
-            HttpExchangeHelper.sendJson(exchange, 500, JsonUtil.error("Erro interno do servidor."));
+            HttpExchangeHelper.sendJson(exchange, 500, JsonUtil.error("Internal server error."));
         } finally {
             exchange.close();
         }
@@ -41,7 +41,7 @@ public abstract class BaseHandler implements HttpHandler {
     protected String requireJsonBody(HttpExchange exchange) throws IOException {
         String contentType = exchange.getRequestHeaders().getFirst("Content-Type");
         if (contentType == null || !contentType.toLowerCase(Locale.ROOT).contains("application/json")) {
-            throw new BadRequestException("Content-Type deve ser application/json.");
+            throw new BadRequestException("Content-Type must be application/json.");
         }
         return HttpExchangeHelper.readRequestBody(exchange);
     }
@@ -53,12 +53,12 @@ public abstract class BaseHandler implements HttpHandler {
         }
 
         if (!path.startsWith(basePath + "/")) {
-            throw new BadRequestException("Rota invalida.");
+            throw new BadRequestException("Invalid route.");
         }
 
         String idSegment = path.substring(basePath.length() + 1);
         if (idSegment.contains("/")) {
-            throw new BadRequestException("Rota invalida.");
+            throw new BadRequestException("Invalid route.");
         }
 
         try {
@@ -68,7 +68,7 @@ public abstract class BaseHandler implements HttpHandler {
             }
             return id;
         } catch (NumberFormatException ex) {
-            throw new BadRequestException("Identificador invalido.");
+            throw new BadRequestException("Invalid identifier.");
         }
     }
 }
