@@ -5,6 +5,7 @@ import java.util.Map;
 
 import com.basic.http.util.HttpExchangeHelper;
 import com.basic.http.util.JsonUtil;
+import com.basic.dto.PageResult;
 import com.basic.model.Product;
 import com.basic.service.ProductService;
 import com.sun.net.httpserver.HttpExchange;
@@ -22,8 +23,19 @@ public class ProductsHandler extends BaseHandler {
         String method = exchange.getRequestMethod();
         int id = extractIdFromPath(exchange, BASE_PATH);
         if ("GET".equalsIgnoreCase(method) && id == -1) {
-            List<Product> products = productService.listAll();
-            HttpExchangeHelper.sendJson(exchange, 200, JsonUtil.products(products));
+            Map<String, String> queryParams = parseQuery(exchange.getRequestURI().getQuery());
+
+            Long cursor = queryParams.containsKey("cursor")
+                    ? Long.parseLong(queryParams.get("cursor"))
+                    : 0L;
+
+            int limit = queryParams.containsKey("limit")
+                    ? Math.min(Integer.parseInt(queryParams.get("limit")), 100)
+                    : 20;
+
+            PageResult<Product> page = productService.listPage(cursor, limit);
+
+            HttpExchangeHelper.sendJson(exchange, 200, JsonUtil.pageProducts(page));
             return;
         }
         if ("GET".equalsIgnoreCase(method)) {
