@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.basic.config.DatabaseConfig;
+import com.basic.dto.PageResult;
 import com.basic.exception.ConflictException;
 import com.basic.exception.NotFoundException;
 import com.basic.model.Product;
@@ -22,6 +23,18 @@ public class ProductService {
     public List<Product> listAll() throws SQLException {
         try (Connection connection = DatabaseConfig.getConnection()) {
             return productRepository.listAll(connection);
+        }
+    }
+
+    public PageResult<Product> listPage(Long cursor, int limit) throws SQLException {
+        try (Connection connection = DatabaseConfig.getConnection()) {
+            List<Product> items = productRepository.listPage(connection, cursor, limit);
+
+            Long nextCursor = null;
+            if (!items.isEmpty()) {
+                nextCursor = Long.valueOf(items.get(items.size() - 1).getId());
+            }
+            return new PageResult<>(items, nextCursor);
         }
     }
 
