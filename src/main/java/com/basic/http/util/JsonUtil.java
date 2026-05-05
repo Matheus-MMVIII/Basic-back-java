@@ -6,6 +6,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.basic.dto.PageResult;
 import com.basic.model.Product;
 import com.basic.exception.BadRequestException;
 
@@ -74,6 +75,13 @@ public final class JsonUtil {
             joiner.add(product(product));
         }
         return joiner.toString();
+    }
+
+    public static String pageProducts(PageResult<Product> page) {
+        return "{"
+                + "\"data\":" + products(page.getData()) + ","
+                + "\"nextCursor\":" + (page.getNextCursor() != null ? page.getNextCursor() : "null")
+                + "}";
     }
 
     private static List<String> splitTopLevel(String content) {
