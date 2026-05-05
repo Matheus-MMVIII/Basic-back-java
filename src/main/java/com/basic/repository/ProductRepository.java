@@ -93,6 +93,21 @@ public class ProductRepository {
         }
     }
 
+    public List<Product> listPage(Connection connection, long cursor, int limit) throws SQLException {
+        String sql = "SELECT * FROM products WHERE id > ? ORDER BY id ASC LIMIT ?";
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setLong(1, cursor);
+            statement.setInt(2, limit);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                List<Product> productItems = new ArrayList<>();
+                while (resultSet.next()) {
+                    productItems.add(mapRow(resultSet));
+                }
+                return productItems;
+            }
+        }
+    }
+
     private Product mapRow(ResultSet resultSet) throws SQLException {
         return new Product(
                 resultSet.getInt("id"),
