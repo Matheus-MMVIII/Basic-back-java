@@ -1,8 +1,10 @@
 package com.basic.http.handler;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Locale;
 import java.sql.SQLException;
+import java.util.Map;
 
 import com.basic.exception.ApiException;
 import com.basic.exception.BadRequestException;
@@ -70,5 +72,28 @@ public abstract class BaseHandler implements HttpHandler {
         } catch (NumberFormatException ex) {
             throw new BadRequestException("Invalid identifier.");
         }
+    }
+
+    protected Map<String, String> parseQuery(String query) {
+        Map<String, String> params = new HashMap<>();
+        if (query == null || query.isEmpty()) return params;
+
+        for (String pair : query.split("&")) {
+            int idx = pair.indexOf("=");
+
+            String key;
+            String value;
+
+            if (idx > 0) {
+                key = pair.substring(0, idx);
+                value = pair.substring(idx + 1);
+            } else {
+                key = pair;
+                value = "";
+            }
+
+            params.put(key, value);
+        }
+        return params;
     }
 }
