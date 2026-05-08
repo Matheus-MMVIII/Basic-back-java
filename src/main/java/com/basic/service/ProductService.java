@@ -38,13 +38,6 @@ public class ProductService {
         }
     }
 
-    public Product findById(int id) throws SQLException {
-        try (Connection connection = DatabaseConfig.getConnection()) {
-            return productRepository.findById(connection, id)
-                    .orElseThrow(() -> new NotFoundException("Product not found by ID."));
-        }
-    }
-
     public Product create(Map<String, String> payload) throws SQLException {
         String name = RequestValidator.requireText(payload, "name", 2, 100);
         double price = RequestValidator.requireDecimal(payload, "price", 0.0, 1000000.0);
@@ -53,6 +46,13 @@ public class ProductService {
 
         try (Connection connection = DatabaseConfig.getConnection()) {
             return productRepository.insert(connection, new Product(0, name, price, category, stock));
+        }
+    }
+
+    public Product findById(int id) throws SQLException {
+        try (Connection connection = DatabaseConfig.getConnection()) {
+            return productRepository.findById(connection, id)
+                    .orElseThrow(() -> new NotFoundException("Product not found by ID."));
         }
     }
 
