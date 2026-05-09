@@ -1,0 +1,30 @@
+-------------------------------------------------------------------------------
+Test set: com.basic.service.ProductServiceTests
+-------------------------------------------------------------------------------
+Tests run: 6, Failures: 0, Errors: 3, Skipped: 0, Time elapsed: 0.519 s <<< FAILURE! -- in com.basic.service.ProductServiceTests
+com.basic.service.ProductServiceTests.mustUpdateProduct -- Time elapsed: 0.018 s <<< ERROR!
+com.basic.exception.NotFoundException: Product not found by ID to be update. 
+	at com.basic.service.ProductService.update(ProductService.java:68)
+	at com.basic.service.ProductServiceTests.mustUpdateProduct(ProductServiceTests.java:79)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:565)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1612)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1612)
+
+com.basic.service.ProductServiceTests.mustFindById -- Time elapsed: 0.012 s <<< ERROR!
+com.basic.exception.NotFoundException: Product not found by ID.
+	at com.basic.service.ProductService.lambda$findById$0(ProductService.java:55)
+	at java.base/java.util.Optional.orElseThrow(Optional.java:407)
+	at com.basic.service.ProductService.findById(ProductService.java:55)
+	at com.basic.service.ProductServiceTests.mustFindById(ProductServiceTests.java:70)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:565)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1612)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1612)
+
+com.basic.service.ProductServiceTests.mustDeleteProduct -- Time elapsed: 0.008 s <<< ERROR!
+com.basic.exception.NotFoundException: Product not found by ID to be deleted. 
+	at com.basic.service.ProductService.delete(ProductService.java:78)
+	at com.basic.service.ProductServiceTests.mustDeleteProduct(ProductServiceTests.java:91)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:565)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1612)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1612)
+
