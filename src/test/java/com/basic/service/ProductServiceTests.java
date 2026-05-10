@@ -46,8 +46,6 @@ class ProductServiceTests {
 
         assertNotNull(listPage);
 
-        assertTrue(listPage.getData().size() >= 0);
-
         assertTrue(listPage.getData().size() <= (int)(limit-cursor));
     }
 
