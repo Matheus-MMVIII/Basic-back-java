@@ -21,13 +21,11 @@ public class ProductsHandler extends BaseHandler {
     @Override
     protected void handleRequest(HttpExchange exchange) throws Exception {
         String method = exchange.getRequestMethod();
-        int id = extractIdFromPath(exchange, BASE_PATH);
-        if ("GET".equalsIgnoreCase(method) && id == -1) {
+        String id = extractIdFromPath(exchange, BASE_PATH);
+        if ("GET".equalsIgnoreCase(method) && id.equalsIgnoreCase("-1")) {
             Map<String, String> queryParams = parseQuery(exchange.getRequestURI().getQuery());
 
-            Long cursor = queryParams.containsKey("cursor")
-                    ? Long.parseLong(queryParams.get("cursor"))
-                    : 0L;
+            String cursor = queryParams.getOrDefault("cursor", "0");
 
             int limit = queryParams.containsKey("limit")
                     ? Math.min(Integer.parseInt(queryParams.get("limit")), 100)
@@ -43,19 +41,19 @@ public class ProductsHandler extends BaseHandler {
             HttpExchangeHelper.sendJson(exchange, 200, JsonUtil.product(product));
             return;
         }
-        if ("POST".equalsIgnoreCase(method) && id == -1) {
+        if ("POST".equalsIgnoreCase(method) && id.equalsIgnoreCase("-1")) {
             Map<String, String> payload = JsonUtil.parseFlatObject(requireJsonBody(exchange));
             Product createdProduct = productService.create(payload);
             HttpExchangeHelper.sendJson(exchange, 201, JsonUtil.product(createdProduct));
             return;
         }
-        if ("PUT".equalsIgnoreCase(method) && id != -1) {
+        if ("PUT".equalsIgnoreCase(method) && !(id.equalsIgnoreCase("-1"))) {
             Map<String, String> payload = JsonUtil.parseFlatObject(requireJsonBody(exchange));
             Product createdProduct = productService.update(id, payload);
             HttpExchangeHelper.sendJson(exchange, 200, JsonUtil.product(createdProduct));
             return;
         }
-        if ("DELETE".equalsIgnoreCase(method) && id != -1) {
+        if ("DELETE".equalsIgnoreCase(method) && !(id.equalsIgnoreCase("-1"))) {
             productService.delete(id);
             HttpExchangeHelper.sendNoContent(exchange);
             return;
