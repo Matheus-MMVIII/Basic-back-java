@@ -61,11 +61,11 @@ public final class JsonUtil {
 
     public static String product(Product product) {
         return "{"
-                + "\"id\":" + product.getId() + ","
+                + "\"id\":" + "\""+product.getId() + "\","
                 + "\"name\":\"" + escape(product.getName()) + "\","
                 + "\"price\":" + product.getPrice() + ","
                 + "\"category\":\"" + product.getCategory() + "\","
-                + "\"stock\":" + product.getStock() + ","
+                + "\"stock\":" + product.getStock()
                 + "}";
     }
 
@@ -80,7 +80,7 @@ public final class JsonUtil {
     public static String pageProducts(PageResult<Product> page) {
         return "{"
                 + "\"data\":" + products(page.getData()) + ","
-                + "\"nextCursor\":" + (page.getNextCursor() != null ? page.getNextCursor() : "null")
+                + "\"nextCursor\":" + (page.getNextCursor() != null ? "\""+page.getNextCursor()+"\"" : "null")
                 + "}";
     }
 
@@ -116,7 +116,7 @@ public final class JsonUtil {
         }
 
         if (inQuotes || escaped) {
-            throw new BadRequestException("JSON invalido.");
+            throw new BadRequestException("JSON invalid.");
         }
 
         parts.add(current.toString().trim());
