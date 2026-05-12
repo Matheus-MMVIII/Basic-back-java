@@ -4,13 +4,13 @@ import java.util.List;
 
 public class PageResult<T> {
     private List<T> data;
-    private Long nextCursor;
+    private String nextCursor;
 
-    public PageResult(List<T> data, Long nextCursor) {
+    public PageResult(List<T> data, String nextCursor) {
         this.data = data;
         this.nextCursor = nextCursor;
     }
 
     public List<T> getData() { return data; }
-    public Long getNextCursor() { return nextCursor; }
+    public String getNextCursor() { return nextCursor; }
 }
