@@ -48,10 +48,10 @@ public abstract class BaseHandler implements HttpHandler {
         return HttpExchangeHelper.readRequestBody(exchange);
     }
 
-    protected int extractIdFromPath(HttpExchange exchange, String basePath) {
+    protected String extractIdFromPath(HttpExchange exchange, String basePath) {
         String path = exchange.getRequestURI().getPath();
         if (path.equals(basePath) || path.equals(basePath + "/")) {
-            return -1;
+            return "-1";
         }
 
         if (!path.startsWith(basePath + "/")) {
@@ -63,15 +63,7 @@ public abstract class BaseHandler implements HttpHandler {
             throw new BadRequestException("Invalid route.");
         }
 
-        try {
-            int id = Integer.parseInt(idSegment);
-            if (id <= 0) {
-                throw new NumberFormatException();
-            }
-            return id;
-        } catch (NumberFormatException ex) {
-            throw new BadRequestException("Invalid identifier.");
-        }
+        return idSegment;
     }
 
     protected Map<String, String> parseQuery(String query) {
