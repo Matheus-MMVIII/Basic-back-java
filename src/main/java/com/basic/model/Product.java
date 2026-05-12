@@ -1,13 +1,13 @@
 package com.basic.model;
 
 public class Product {
-    private final int id;
+    private final String id;
     private final String name;
     private final double price;
     private final Category category;
     private final int stock;
 
-    public Product(int id, String name, double price, String category, int stock) {
+    public Product(String id, String name, double price, String category, int stock) {
         if (name == null || name.trim().isEmpty())
             throw new IllegalArgumentException("Product name cannot be null or empty");
         if (price < 0)
@@ -23,7 +23,7 @@ public class Product {
         this.stock = stock;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
