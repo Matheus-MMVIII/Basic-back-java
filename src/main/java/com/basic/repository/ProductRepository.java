@@ -9,21 +9,27 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import com.basic.common.Ids;
 import com.basic.model.Product;
 
 public class ProductRepository {
     public Product insert(Connection connection, Product product) throws SQLException {
-        String sql = "INSERT INTO products (name, price, category, stock) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO products (id, name, price, category, stock) VALUES (?, ?, ?, ?, ?)";
+
+        String ksuidGenerated = Ids.newId();
         try (PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-            statement.setString(1, product.getName());
-            statement.setDouble(2, product.getPrice());
-            statement.setString(3, product.getCategory());
-            statement.setInt(4, product.getStock());
-            statement.executeUpdate();
+            statement.setString(1, ksuidGenerated);
+            statement.setString(2, product.getName());
+            statement.setDouble(3, product.getPrice());
+            statement.setString(4, product.getCategory());
+            statement.setInt(5, product.getStock());
+            if (statement.executeUpdate() == 0) {
+                throw new SQLException("Insert invalid.");
+            }
             try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
                 if (generatedKeys.next()) {
                     return new Product(
-                            generatedKeys.getInt(1),
+                            generatedKeys.getString(1),
                             product.getName(),
                             product.getPrice(),
                             product.getCategory(),
@@ -34,10 +40,10 @@ public class ProductRepository {
         throw new SQLException("Failure to generate product identifier. ");
     }
 
-    public Optional<Product> findById(Connection connection, int productId) throws SQLException {
+    public Optional<Product> findById(Connection connection, String productId) throws SQLException {
         String sql = "SELECT * FROM products WHERE id = ?";
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
-            statement.setInt(1, productId);
+            statement.setString(1, productId);
             try (ResultSet resultSet = statement.executeQuery()) {
                 if (resultSet.next()) {
                     return Optional.of(mapRow(resultSet));
@@ -72,10 +78,10 @@ public class ProductRepository {
         return product;
     }
 
-    public boolean delete(Connection connection, int productId) throws SQLException {
+    public boolean delete(Connection connection, String productId) throws SQLException {
         String sql = "DELETE FROM products WHERE id = ?";
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
-            statement.setInt(1, productId);
+            statement.setString(1, productId);
             return statement.executeUpdate() > 0;
         }
     }
@@ -93,10 +99,10 @@ public class ProductRepository {
         }
     }
 
-    public List<Product> listPage(Connection connection, long cursor, int limit) throws SQLException {
-        String sql = "SELECT * FROM products WHERE id > ? ORDER BY id ASC LIMIT ?";
+    public List<Product> listPage(Connection connection, String cursor, int limit) throws SQLException {
+        String sql = "SELECT * FROM products WHERE id > ? ORDER BY id LIMIT ?";
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
-            statement.setLong(1, cursor);
+            statement.setString(1, cursor);
             statement.setInt(2, limit);
             try (ResultSet resultSet = statement.executeQuery()) {
                 List<Product> productItems = new ArrayList<>();
@@ -110,7 +116,7 @@ public class ProductRepository {
 
     private Product mapRow(ResultSet resultSet) throws SQLException {
         return new Product(
-                resultSet.getInt("id"),
+                resultSet.getString("id"),
                 resultSet.getString("name"),
                 resultSet.getDouble("price"),
                 resultSet.getString("category"),
