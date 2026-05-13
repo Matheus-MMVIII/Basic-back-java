@@ -26,13 +26,13 @@ public class ProductService {
         }
     }
 
-    public PageResult<Product> listPage(Long cursor, int limit) throws SQLException {
+    public PageResult<Product> listPage(String cursor, int limit) throws SQLException {
         try (Connection connection = DatabaseConfig.getConnection()) {
             List<Product> items = productRepository.listPage(connection, cursor, limit);
 
-            Long nextCursor = null;
+            String nextCursor = null;
             if (!items.isEmpty()) {
-                nextCursor = Long.valueOf(items.get(items.size() - 1).getId());
+                nextCursor = String.valueOf(items.get(items.size() - 1).getId());
             }
             return new PageResult<>(items, nextCursor);
         }
@@ -45,18 +45,18 @@ public class ProductService {
         int stock = RequestValidator.requireInt(payload, "stock", 0, 1000000);
 
         try (Connection connection = DatabaseConfig.getConnection()) {
-            return productRepository.insert(connection, new Product(0, name, price, category, stock));
+            return productRepository.insert(connection, new Product("", name, price, category, stock));
         }
     }
 
-    public Product findById(int id) throws SQLException {
+    public Product findById(String id) throws SQLException {
         try (Connection connection = DatabaseConfig.getConnection()) {
             return productRepository.findById(connection, id)
                     .orElseThrow(() -> new NotFoundException("Product not found by ID."));
         }
     }
 
-    public Product update(int id, Map<String, String> payload) throws SQLException {
+    public Product update(String id, Map<String, String> payload) throws SQLException {
         String name = RequestValidator.requireText(payload, "name", 2, 100);
         double price = RequestValidator.requireDecimal(payload, "price", 0.0, 1000000.0);
         String category = RequestValidator.requireText(payload, "category", 2, 100);
@@ -71,7 +71,7 @@ public class ProductService {
         }
     }
 
-    public void delete(int id) throws SQLException {
+    public void delete(String id) throws SQLException {
         try (Connection connection = DatabaseConfig.getConnection()) {
             boolean deleted = productRepository.delete(connection, id);
             if (!deleted) {
