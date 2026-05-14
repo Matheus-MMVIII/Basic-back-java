@@ -67,12 +67,13 @@ public class ProductRepository {
     }
 
     public Product update(Connection connection, Product product) throws SQLException {
-        String sql = "UPDATE products SET name = ?, price = ?, category = ?, stock = ?, WHERE id = ?";
+        String sql = "UPDATE products SET name = ?, price = ?, category = ?, stock = ? WHERE id = ?";
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setString(1, product.getName());
             statement.setDouble(2, product.getPrice());
             statement.setString(3, product.getCategory());
             statement.setInt(4, product.getStock());
+            statement.setString(5, product.getId());
             statement.executeUpdate();
         }
         return product;
