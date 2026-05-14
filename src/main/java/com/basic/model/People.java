@@ -1,25 +1,25 @@
 package com.basic.model;
 
-public abstract class People {
+public class People {
 	private final String name;
 	private final Cpf cpf;
 	private final Email email;
 
-	public People(String name, Cpf cpf, Email email) {
+	public People(String name, String cpf, String email) {
 		this.name = name;
-		this.cpf = cpf;
-		this.email = email;
+		this.cpf = new Cpf(cpf);
+		this.email = new Email(email);
 	}
 
 	public String getName() {
 		return name;
 	}
 
-	public Cpf getCpf() {
-		return cpf;
+	public String getCpf() {
+		return cpf.getCpf();
 	}
 
-	public Email getEmail() {
-		return email;
+	public String getEmail() {
+		return email.getEmail();
 	}
 }
