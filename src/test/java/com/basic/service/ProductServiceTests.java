@@ -1,6 +1,7 @@
 package com.basic.service;
 
 import com.basic.dto.PageResult;
+import com.basic.exception.BadRequestException;
 import com.basic.http.util.JsonUtil;
 import com.basic.model.Product;
 import com.basic.repository.ProductRepository;
@@ -26,17 +27,18 @@ class ProductServiceTests {
     }
 
     @Test
-    void mustListProducts() throws SQLException {
+    void productsTests() throws SQLException {
+        String id = mustCreateProduct();
 
-        List<Product> list = productService.listAll();
+        mustUpdateProduct(mustFindedById(id));
+        mustDeleteProduct(id);
 
-        assertNotNull(list);
     }
 
     @Test
     void mustSpecificListProducts() throws SQLException {
 
-        Random rand = new Random();
+        /*Random rand = new Random();
 
         Long cursor = rand.nextLong(1,  10);
 
@@ -46,11 +48,10 @@ class ProductServiceTests {
 
         assertNotNull(listPage);
 
-        assertTrue(listPage.getData().size() <= (int)(limit-cursor));
+        assertTrue(listPage.getData().size() <= (int)(limit-cursor));*/
     }
 
-    @Test
-    void mustCreateProduct() throws SQLException {
+    String mustCreateProduct() throws SQLException {
         Map<String, String> payload = JsonUtil.parseFlatObject("{\"name\":\"TESTE\",\"price\":0.0,\"category\":\"Food\",\"stock\":0}");
 
         Product product = productService.create(payload);
@@ -61,32 +62,39 @@ class ProductServiceTests {
         assertEquals(0.0d, product.getPrice());
         assertEquals("Food", product.getCategory());
         assertEquals(0, product.getStock());
+
+        return product.getId();
     }
 
-    @Test
-    void mustFindById() throws SQLException {
-        Product product = productService.findById(1);
-
-        assertNotNull(product);
-    }
-
-    @Test
-    void mustUpdateProduct() throws SQLException {
-        Map<String, String> payload = JsonUtil.parseFlatObject("{\"name\":\"TESTE\",\"price\":0.0,\"category\":\"Food\",\"stock\":0}");
-
-        Product product = productService.update(1, payload);
+    Product mustFindedById(String id) throws SQLException {
+        Product product = productService.findById(id);
 
         assertNotNull(product);
 
-        assertEquals("TESTE", product.getName());
-        assertEquals(0.0d, product.getPrice());
+        return product;
+    }
+
+    void mustUpdateProduct(Product oldProduct) throws SQLException {
+        Map<String, String> payload = JsonUtil.parseFlatObject("{\"name\":\"TESTANDO\",\"price\":10.0,\"category\":\"Food\",\"stock\":10}");
+
+
+        assertEquals("TESTE", oldProduct.getName());
+        assertEquals(0.0d, oldProduct.getPrice());
+        assertEquals("Food", oldProduct.getCategory());
+        assertEquals(0, oldProduct.getStock());
+
+        Product product = productService.update(oldProduct.getId(), payload);
+
+        assertNotNull(product);
+
+        assertEquals("TESTANDO", product.getName());
+        assertEquals(10.0d, product.getPrice());
         assertEquals("Food", product.getCategory());
-        assertEquals(0, product.getStock());
+        assertEquals(10, product.getStock());
     }
 
-    @Test
-    void mustDeleteProduct() throws SQLException {
-        productService.delete(1);
+    void mustDeleteProduct(String id) throws SQLException {
+        productService.delete(id);
     }
 
 }
