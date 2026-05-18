@@ -1,23 +1,29 @@
 package com.basic.service;
 
-import com.basic.dto.PageResult;
-import com.basic.exception.BadRequestException;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.when;
+
 import com.basic.http.util.JsonUtil;
 import com.basic.model.Product;
 import com.basic.repository.ProductRepository;
+import com.basic.service.ProductService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.MockitoJUnitRunner;
 
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 class ProductServiceTests {
 
+    @Mock
     ProductRepository productRepository;
+
+    @InjectMocks
     ProductService productService;
 
     @BeforeEach
