@@ -3,6 +3,7 @@ package com.basic.service;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
+import com.basic.exception.NotFoundException;
 import com.basic.http.util.JsonUtil;
 import com.basic.model.Product;
 import com.basic.repository.ProductRepository;
@@ -44,17 +45,22 @@ class ProductServiceTests {
     @Test
     void mustSpecificListProducts() throws SQLException {
 
-        /*Random rand = new Random();
+        Random rand = new Random();
 
-        Long cursor = rand.nextLong(1,  10);
+        int limit = rand.nextInt(1, 10);
 
-        int limit = (int)(cursor+10);
+        String[] ids = new String[limit];
 
-        PageResult<Product> listPage = productService.listPage(cursor, limit);
+        for (int i = 0; i < limit; i++) {
+            ids[i] = mustCreateProduct();
+        }
 
-        assertNotNull(listPage);
+        assertNotNull(productService.listPage("aaa", limit));
 
-        assertTrue(listPage.getData().size() <= (int)(limit-cursor));*/
+        for (int i = 0; i < limit; i++) {
+            mustDeleteProduct(ids[i]);
+        }
+
     }
 
     String mustCreateProduct() throws SQLException {
@@ -77,12 +83,13 @@ class ProductServiceTests {
 
         assertNotNull(product);
 
+        assertEquals(id, product.getId());
+
         return product;
     }
 
     void mustUpdateProduct(Product oldProduct) throws SQLException {
         Map<String, String> payload = JsonUtil.parseFlatObject("{\"name\":\"TESTANDO\",\"price\":10.0,\"category\":\"Food\",\"stock\":10}");
-
 
         assertEquals("TESTE", oldProduct.getName());
         assertEquals(0.0d, oldProduct.getPrice());
@@ -93,6 +100,7 @@ class ProductServiceTests {
 
         assertNotNull(product);
 
+        assertEquals(oldProduct.getId(), product.getId());
         assertEquals("TESTANDO", product.getName());
         assertEquals(10.0d, product.getPrice());
         assertEquals("Food", product.getCategory());
@@ -101,6 +109,7 @@ class ProductServiceTests {
 
     void mustDeleteProduct(String id) throws SQLException {
         productService.delete(id);
+        assertThrows(NotFoundException.class, () -> { productService.findById(id); });
     }
 
 }
